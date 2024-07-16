@@ -207,10 +207,11 @@ public class TelnetConsole {
         }
 
         TelnetConsole telnetConsole = new TelnetConsole();
+        // 解析TelnetConsole属性上的注解
         CLI cli = CLIConfigurator.define(TelnetConsole.class);
-
+        // 解析命令行参数
         CommandLine commandLine = cli.parse(Arrays.asList(args));
-
+        // 将注解值注入属性
         CLIConfigurator.inject(commandLine, telnetConsole);
 
         if (telnetConsole.isHelp()) {
@@ -303,6 +304,7 @@ public class TelnetConsole {
             consoleReader.getKeys().bind(Character.toString(KeyMap.CTRL_D), eotEventCallback);
 
             try {
+                // 连接服务端
                 telnet.connect(telnetConsole.getTargetIp(), telnetConsole.getPort());
             } catch (IOException e) {
                 System.out.println("Connect to telnet server error: " + telnetConsole.getTargetIp() + " "

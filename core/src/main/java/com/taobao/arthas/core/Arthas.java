@@ -87,6 +87,7 @@ public class Arthas {
 
     private void attachAgent(Configure configure) throws Exception {
         VirtualMachineDescriptor virtualMachineDescriptor = null;
+        // 列出当前正在运行的虚拟机实例
         for (VirtualMachineDescriptor descriptor : VirtualMachine.list()) {
             String pid = descriptor.id();
             if (pid.equals(Long.toString(configure.getJavaPid()))) {
@@ -99,6 +100,7 @@ public class Arthas {
             if (null == virtualMachineDescriptor) { // 使用 attach(String pid) 这种方式
                 virtualMachine = VirtualMachine.attach("" + configure.getJavaPid());
             } else {
+                // 连接到目标虚拟机
                 virtualMachine = VirtualMachine.attach(virtualMachineDescriptor);
             }
 
@@ -114,11 +116,13 @@ public class Arthas {
                 }
             }
 
+            // 获取arthas-agent.jar路径
             String arthasAgentPath = configure.getArthasAgent();
             //convert jar path to unicode string
             configure.setArthasAgent(encodeArg(arthasAgentPath));
             configure.setArthasCore(encodeArg(configure.getArthasCore()));
             try {
+                // 目标虚拟机中加载agent,并传递参数
                 virtualMachine.loadAgent(arthasAgentPath,
                         configure.getArthasCore() + ";" + configure.toString());
             } catch (IOException e) {

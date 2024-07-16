@@ -143,6 +143,7 @@ public class AgentBootstrap {
             /**
              * Use a dedicated thread to run the binding logic to prevent possible memory leak. #195
              */
+            // 使用arthas自定义加载器加载arthas-core.jar
             final ClassLoader agentLoader = getClassLoader(inst, arthasCoreJarFile);
 
             Thread bindingThread = new Thread() {
